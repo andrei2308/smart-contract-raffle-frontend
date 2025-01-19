@@ -1,70 +1,76 @@
-# Getting Started with Create React App
+# Smart Contract Raffle Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This repository contains the frontend for the Smart Contract Raffle project. It is designed to interact with the smart contract deployed and managed through the corresponding backend repository.
 
-## Available Scripts
+## Related Repositories
 
-In the project directory, you can run:
+- **Frontend Repository (this repo):** [smart-contract-raffle-frontend](https://github.com/andrei2308/smart-contract-raffle-frontend)
+- **Backend Repository:** [foundry-raffle-smart-contract](https://github.com/andrei2308/foundry-raffle-smart-contract)
 
-### `npm start`
+The backend repository contains the smart contract code, written in Solidity and developed using Foundry, to manage the raffle logic and blockchain interactions.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Project Overview
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+The Smart Contract Raffle project is a decentralized raffle system where users can enter the raffle by interacting with the smart contract via this frontend. The frontend provides an intuitive UI for users to:
 
-### `npm test`
+- Enter the raffle by submitting their entries.
+- View the current raffle status.
+- Check raffle history and winners.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Features
 
-### `npm run build`
+- **User-friendly Interface:** Easily interact with the raffle contract.
+- **Web3 Integration:** Seamlessly connects with Ethereum wallets.
+- **Real-time Updates:** Displays live raffle information.
+- **Smart Contract Interaction:** Allows users to participate and view results.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Installation
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/andrei2308/smart-contract-raffle-frontend.git
+   cd smart-contract-raffle-frontend
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-### `npm run eject`
+3. Create an `.env` file and configure environment variables (e.g., Infura API key, contract address).
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Usage
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1. Ensure you have a Web3 wallet (e.g., MetaMask) installed and connected to the appropriate blockchain network.
+2. Access the application in your browser at `http://localhost:3000`.
+3. Enter the raffle by submitting entries through the UI.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Technologies Used
 
-## Learn More
+- React.js
+- Next.js
+- Ethers.js
+- Tailwind CSS
+- Web3.js
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Contributing
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Contributions are welcome! Feel free to submit issues or pull requests to help improve the project.
 
-### Code Splitting
+## License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+This project is licensed under the MIT License.
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Acknowledgment
 
-### Making a Progressive Web App
+This project is built as part of a decentralized application initiative using Foundry for smart contract development.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+For more details on the smart contract, visit the backend repository: [foundry-raffle-smart-contract](https://github.com/andrei2308/foundry-raffle-smart-contract).
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
