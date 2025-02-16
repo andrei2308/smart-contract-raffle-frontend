@@ -24,9 +24,15 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    connectWallet();
     fetchRaffleData();
     listenForEvents();
+    if (window.ethereum) {
+      window.ethereum.on('accountsChanged', (accounts) => {
+        setAccount(accounts[0]);
+      })
+    } else {
+      setAccount(null);
+    }
   }, []);
 
   // Connect MetaMask
