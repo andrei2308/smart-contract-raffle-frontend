@@ -67,7 +67,7 @@ function Home({ account, setAccount }) {
         </Box>
 
         <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold' }}>
-          🎰 Welcome to the Raffle 🎰
+          🎟️ Welcome to the Raffle 🎟️
         </Typography>
 
         <Typography variant="body1" sx={{ mb: 4, color: 'text.secondary' }}>

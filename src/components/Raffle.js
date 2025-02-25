@@ -183,14 +183,14 @@ function Raffle({ account }) {
                         textShadow: "0px 0px 10px rgba(0, 209, 255, 0.3)"
                     }}
                 >
-                    🎰 Raffle 🎰
+                    🎟️ Raffle 🎟️
                 </Typography>
             </Box>
 
             {/* Main Grid */}
             <Grid container spacing={3} justifyContent="center">
                 {/* Left Column - Entry */}
-                <Grid item xs={12} md={5}>
+                <Grid item xs={12} md={6}>
                     <Card sx={{
                         backgroundColor: "rgba(30, 30, 30, 0.8)",
                         padding: "1.5rem",
@@ -202,15 +202,16 @@ function Raffle({ account }) {
                             sx={{
                                 color: "#00d1ff",
                                 textAlign: "center",
-                                marginBottom: "2rem"
+                                marginBottom: "2rem",
+                                whiteSpace: "nowrap"
                             }}
                         >
-                            Enter The Raffle
+                            Enter&nbsp;the&nbsp;raffle
                         </Typography>
 
                         <Box sx={{ textAlign: "center", marginBottom: "2rem" }}>
                             <Typography variant="h6" sx={{ color: "#ffffff", marginBottom: "0.5rem" }}>
-                                Entrance Fee:
+                                Entrance fee:
                             </Typography>
                             <Typography
                                 variant="h4"
@@ -260,7 +261,7 @@ function Raffle({ account }) {
                                     marginBottom: "1rem"
                                 }}
                             >
-                                🏆 Last Winner
+                                🏆 Last winner
                             </Typography>
                             <Box
                                 sx={{
@@ -299,7 +300,7 @@ function Raffle({ account }) {
                 </Grid>
 
                 {/* Right Column - Participants */}
-                <Grid item xs={12} md={5}>
+                <Grid item xs={12} md={6}>
                     <Card sx={{
                         backgroundColor: "rgba(30, 30, 30, 0.8)",
                         padding: "1.5rem",
@@ -311,10 +312,11 @@ function Raffle({ account }) {
                             sx={{
                                 color: "#39ff14",
                                 textAlign: "center",
-                                marginBottom: "2rem"
+                                marginBottom: "2rem",
+                                whiteSpace: "nowrap"
                             }}
                         >
-                            Current Participants
+                            Current&nbsp;participants
                         </Typography>
 
                         <TableContainer
