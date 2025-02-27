@@ -27,10 +27,14 @@ function Raffle({ account }) {
     const [winner, setWinner] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
-
+    const [eligibleAddresses, setEligibleAddresses] = useState(new Set());
     useEffect(() => {
         fetchRaffleData();
         listenForEvents();
+        return () => {
+            contract.off("WinnerPicked", handleWinnerPicked);
+            contract.off("AchievementEarned", handleAchievementEarned);
+        };
     }, [account]);
 
     useEffect(() => {
@@ -111,6 +115,11 @@ function Raffle({ account }) {
                 setWinner(winnerAddress);
                 setPlayers([]);
             });
+            contract.on("AchievementEarned", (player, achievementID) => {
+                console.log("Achievement event detected:", player, achievementID);
+                setEligibleAddresses((prev) => new Set(prev).add(player));
+            }
+            );
         } catch (error) {
             console.error("Error listening for events:", error);
         }
