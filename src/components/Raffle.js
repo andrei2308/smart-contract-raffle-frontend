@@ -30,10 +30,12 @@ function Raffle({ account }) {
     const [eligibleAddresses, setEligibleAddresses] = useState(new Set());
     useEffect(() => {
         fetchRaffleData();
-        listenForEvents();
+        const cleanupEvents = listenForEvents();
+
         return () => {
-            contract.off("WinnerPicked", handleWinnerPicked);
-            contract.off("AchievementEarned", handleAchievementEarned);
+            if (cleanupEvents && typeof cleanupEvents === 'function') {
+                cleanupEvents();
+            }
         };
     }, [account]);
 
@@ -105,10 +107,22 @@ function Raffle({ account }) {
         }
     };
 
+    let allEligibleAddresses = new Set();
+
+    let listenersInitialized = false;
+
     const listenForEvents = async () => {
+
+        if (listenersInitialized) {
+            console.log("Event listeners already initialized, skipping setup");
+            return () => console.log("Skipped cleanup for duplicate call");
+        }
+
         try {
             const provider = new ethers.JsonRpcProvider("http://127.0.0.1:8545");
             const contract = new ethers.Contract(address, abi, provider);
+
+            console.log("Setting up event listeners for the first time...");
 
             contract.on("WinnerPicked", (winnerAddress) => {
                 console.log("Winner event detected:", winnerAddress);
@@ -116,15 +130,82 @@ function Raffle({ account }) {
                 setPlayers([]);
             });
             contract.on("AchievementEarned", (player, achievementID) => {
-                console.log("Achievement event detected:", player, achievementID);
-                setEligibleAddresses((prev) => new Set(prev).add(player));
-            }
-            );
+
+                const safePlayer = String(player);
+                const safeAchievementID = Number(achievementID);
+
+                console.log("Achievement event detected:",
+                    "Player:", safePlayer,
+                    "AchievementID:", safeAchievementID);
+
+                allEligibleAddresses.add(safePlayer);
+
+                setEligibleAddresses(prevAddresses => {
+                    const newSet = new Set([...prevAddresses]);
+                    newSet.add(safePlayer);
+                    return newSet;
+                });
+
+                const achievementData = {
+                    player: safePlayer,
+                    achievementID: safeAchievementID
+                };
+
+                const allAddressesArray = Array.from(allEligibleAddresses);
+                console.log("Current eligible addresses:", allAddressesArray);
+
+                fetch("http://localhost:10001/api/submit/eligible", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(achievementData)
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            console.log("Achievement data successfully sent");
+
+                            return fetch("http://localhost:10001/api/submit/addresses", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify({
+                                    addresses: allAddressesArray,
+                                    totalCount: allAddressesArray.length
+                                })
+                            });
+                        } else {
+                            return response.text().then(text => {
+                                throw new Error(`Server error: ${text}`);
+                            });
+                        }
+                    })
+                    .then(response => {
+                        if (response && response.ok) {
+                            console.log("All addresses successfully sent, count:", allAddressesArray.length);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error in API request:", error.message);
+                    });
+            });
+
+            const cleanup = () => {
+                console.log("Cleaning up event listeners");
+                contract.removeAllListeners("WinnerPicked");
+                contract.removeAllListeners("AchievementEarned");
+                listenersInitialized = false;
+            };
+
+            return cleanup;
         } catch (error) {
             console.error("Error listening for events:", error);
+            // Reset flag on error
+            listenersInitialized = false;
+            return () => console.log("No listeners to clean up");
         }
     };
-
     const truncateAddress = (address) => {
         if (!address) return "";
         return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;

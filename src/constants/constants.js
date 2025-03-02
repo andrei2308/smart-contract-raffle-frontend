@@ -93,6 +93,19 @@ export const abi = [
     },
     {
         "type": "function",
+        "name": "getIntervalOfRaffleWinnerSelection",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
         "name": "getLastTimestamp",
         "inputs": [],
         "outputs": [
@@ -103,6 +116,19 @@ export const abi = [
             }
         ],
         "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "getNUM_WORDS",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint32",
+                "internalType": "uint32"
+            }
+        ],
+        "stateMutability": "pure"
     },
     {
         "type": "function",
@@ -135,6 +161,19 @@ export const abi = [
             }
         ],
         "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "getRequestConfirmations",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint16",
+                "internalType": "uint16"
+            }
+        ],
+        "stateMutability": "pure"
     },
     {
         "type": "function",
@@ -244,6 +283,25 @@ export const abi = [
         ],
         "outputs": [],
         "stateMutability": "nonpayable"
+    },
+    {
+        "type": "event",
+        "name": "AchievementEarned",
+        "inputs": [
+            {
+                "name": "player",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "achievementId",
+                "type": "uint256",
+                "indexed": true,
+                "internalType": "uint256"
+            }
+        ],
+        "anonymous": false
     },
     {
         "type": "event",
