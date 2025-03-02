@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ethers } from "ethers";
 import { abi, address } from "../constants/constants.js";
 import {
@@ -28,9 +28,16 @@ function Raffle({ account }) {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const [eligibleAddresses, setEligibleAddresses] = useState(new Set());
+
+    const listenersInitialized = useRef(false);
+    const allEligibleAddresses = useRef(new Set());
     useEffect(() => {
         fetchRaffleData();
-        const cleanupEvents = listenForEvents();
+
+        let cleanupEvents;
+        if (!listenersInitialized.current) {
+            cleanupEvents = listenForEvents();
+        }
 
         return () => {
             if (cleanupEvents && typeof cleanupEvents === 'function') {
@@ -38,6 +45,7 @@ function Raffle({ account }) {
             }
         };
     }, [account]);
+
 
     useEffect(() => {
         if (window.ethereum) {
@@ -107,13 +115,8 @@ function Raffle({ account }) {
         }
     };
 
-    let allEligibleAddresses = new Set();
-
-    let listenersInitialized = false;
-
     const listenForEvents = async () => {
-
-        if (listenersInitialized) {
+        if (listenersInitialized.current) {
             console.log("Event listeners already initialized, skipping setup");
             return () => console.log("Skipped cleanup for duplicate call");
         }
@@ -129,8 +132,8 @@ function Raffle({ account }) {
                 setWinner(winnerAddress);
                 setPlayers([]);
             });
-            contract.on("AchievementEarned", (player, achievementID) => {
 
+            contract.on("AchievementEarned", (player, achievementID) => {
                 const safePlayer = String(player);
                 const safeAchievementID = Number(achievementID);
 
@@ -138,7 +141,7 @@ function Raffle({ account }) {
                     "Player:", safePlayer,
                     "AchievementID:", safeAchievementID);
 
-                allEligibleAddresses.add(safePlayer);
+                allEligibleAddresses.current.add(safePlayer);
 
                 setEligibleAddresses(prevAddresses => {
                     const newSet = new Set([...prevAddresses]);
@@ -151,7 +154,7 @@ function Raffle({ account }) {
                     achievementID: safeAchievementID
                 };
 
-                const allAddressesArray = Array.from(allEligibleAddresses);
+                const allAddressesArray = Array.from(allEligibleAddresses.current);
                 console.log("Current eligible addresses:", allAddressesArray);
 
                 fetch("http://localhost:10001/api/submit/eligible", {
@@ -190,19 +193,19 @@ function Raffle({ account }) {
                         console.error("Error in API request:", error.message);
                     });
             });
+            listenersInitialized.current = true;
 
             const cleanup = () => {
                 console.log("Cleaning up event listeners");
                 contract.removeAllListeners("WinnerPicked");
                 contract.removeAllListeners("AchievementEarned");
-                listenersInitialized = false;
+                listenersInitialized.current = false;
             };
 
             return cleanup;
         } catch (error) {
             console.error("Error listening for events:", error);
-            // Reset flag on error
-            listenersInitialized = false;
+            listenersInitialized.current = false;
             return () => console.log("No listeners to clean up");
         }
     };
