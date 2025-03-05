@@ -4,7 +4,6 @@ import { ethers } from "ethers";
 import Raffle from "./components/Raffle";
 import { Container, Button, Typography, Card, Box, CircularProgress, Snackbar, Alert, ThemeProvider, CssBaseline } from "@mui/material";
 import { AccountBalanceWallet, Casino } from "@mui/icons-material";
-import "./App.css";
 import theme from "./themes/theme.js"
 function Home({ account, setAccount }) {
   const navigate = useNavigate();
