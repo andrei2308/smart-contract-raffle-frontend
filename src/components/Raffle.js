@@ -1,40 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { abi, address } from "../constants/constants.js";
+import HowItWorksDialog from './HowItWorks';
+import AppDrawer from './AppDrawer';
 import {
-    Container,
-    Button,
-    Typography,
-    CircularProgress,
-    Card,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Paper,
     Box,
+    Typography,
+    Container,
+    Grid,
     Chip,
-    Grid
-} from "@mui/material";
-import "../App.css";
-import { useNavigate } from "react-router-dom";
-import {
-    Drawer,
-    List,
-    ListItem,
-    ListItemButton,
-    ListItemIcon,
-    ListItemText,
-    Divider,
-    Link
+    Button,
+    TableContainer,
+    Table,
+    TableHead,
+    TableBody,
+    TableRow,
+    TableCell,
+    CircularProgress,
 } from '@mui/material';
-import CasinoIcon from '@mui/icons-material/Casino';
-import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
-import HistoryIcon from '@mui/icons-material/History';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-// Define drawer width
+import "../App.css";
+import theme from "../themes/theme.js"
+import { useNavigate } from "react-router-dom";
+
 const drawerWidth = 240;
 function Raffle({ account }) {
     const [entranceFee, setEntranceFee] = useState(null);
@@ -42,6 +29,7 @@ function Raffle({ account }) {
     const [winner, setWinner] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    const [howItWorksOpen, setHowItWorksOpen] = useState(false);
 
     useEffect(() => {
         fetchRaffleData();
@@ -59,6 +47,14 @@ function Raffle({ account }) {
             });
         }
     }, []);
+
+    const handleOpenHowItWorks = () => {
+        setHowItWorksOpen(true);
+    };
+
+    const handleCloseHowItWorks = () => {
+        setHowItWorksOpen(false);
+    };
 
     const fetchRaffleData = async () => {
         try {
@@ -139,216 +135,10 @@ function Raffle({ account }) {
     return (
         <>
             {/* Left Drawer */}
-            <Drawer
-                variant="permanent"
-                anchor="left"
-                sx={{
-                    width: drawerWidth,
-                    flexShrink: 0,
-                    '& .MuiDrawer-paper': {
-                        width: drawerWidth,
-                        boxSizing: 'border-box',
-                        background: "#0a0a14",
-                        borderRight: "1px solid rgba(0, 209, 255, 0.15)",
-                    },
-                }}
-            >
-                {/* Drawer Header */}
-                <Box
-                    sx={{
-                        padding: "1rem",
-                        display: "flex",
-                        alignItems: "center",
-                        borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
-                    }}
-                >
-                    <CasinoIcon sx={{ color: "#00d1ff", marginRight: "0.5rem", fontSize: "1.8rem" }} />
-                    <Box>
-                        <Typography
-                            variant="h6"
-                            sx={{
-                                color: "#00d1ff",
-                                fontWeight: "bold",
-                                lineHeight: 1.2,
-                                fontSize: "1.2rem",
-                            }}
-                        >
-                            DApp Raffle
-                        </Typography>
-                        <Typography
-                            variant="caption"
-                            sx={{
-                                color: "rgba(255, 255, 255, 0.6)",
-                                display: "block",
-                                fontSize: "0.7rem",
-                            }}
-                        >
-                            Decentralized lottery system
-                        </Typography>
-                    </Box>
-                </Box>
-
-                {/* Navigation Menu */}
-                <List sx={{ padding: "0" }}>
-                    <ListItem disablePadding>
-                        <ListItemButton
-                            selected={true}
-                            sx={{
-                                "&.Mui-selected": {
-                                    backgroundColor: "rgba(0, 209, 255, 0.1)",
-                                    borderLeft: "3px solid #00d1ff",
-                                    "&:hover": {
-                                        backgroundColor: "rgba(0, 209, 255, 0.15)",
-                                    },
-                                },
-                                "&:hover": {
-                                    backgroundColor: "rgba(255, 255, 255, 0.05)",
-                                },
-                            }}
-                        >
-                            <ListItemIcon sx={{ color: "#00d1ff", minWidth: "40px" }}>
-                                <CardGiftcardIcon />
-                            </ListItemIcon>
-                            <ListItemText
-                                primary="Current Raffle"
-                                primaryTypographyProps={{
-                                    color: "#ffffff",
-                                    fontSize: "0.9rem",
-                                }}
-                            />
-                        </ListItemButton>
-                    </ListItem>
-                    <ListItem disablePadding>
-                        <ListItemButton
-                            sx={{
-                                "&:hover": {
-                                    backgroundColor: "rgba(255, 255, 255, 0.05)",
-                                },
-                            }}
-                        >
-                            <ListItemIcon sx={{ color: "#aaaaaa", minWidth: "40px" }}>
-                                <HistoryIcon />
-                            </ListItemIcon>
-                            <ListItemText
-                                primary="Past Raffles"
-                                primaryTypographyProps={{
-                                    color: "#aaaaaa",
-                                    fontSize: "0.9rem",
-                                }}
-                            />
-                        </ListItemButton>
-                    </ListItem>
-                    <ListItem disablePadding>
-                        <ListItemButton
-                            sx={{
-                                "&:hover": {
-                                    backgroundColor: "rgba(255, 255, 255, 0.05)",
-                                },
-                            }}
-                        >
-                            <ListItemIcon sx={{ color: "#aaaaaa", minWidth: "40px" }}>
-                                <InfoOutlinedIcon />
-                            </ListItemIcon>
-                            <ListItemText
-                                primary="How It Works"
-                                primaryTypographyProps={{
-                                    color: "#aaaaaa",
-                                    fontSize: "0.9rem",
-                                }}
-                            />
-                        </ListItemButton>
-                    </ListItem>
-                </List>
-
-                <Box sx={{ flexGrow: 1 }} />
-
-                {/* Stats Section */}
-                <Box sx={{ padding: "0.75rem 1rem" }}>
-                    <Typography
-                        variant="subtitle2"
-                        sx={{
-                            color: "#aaaaaa",
-                            marginBottom: "0.5rem",
-                            fontSize: "0.7rem",
-                            letterSpacing: "1px",
-                        }}
-                    >
-                        STATISTICS
-                    </Typography>
-                    <List dense sx={{ padding: 0 }}>
-                        <ListItem sx={{ padding: "0.25rem 0" }}>
-                            <ListItemText
-                                primary="Total Value Locked"
-                                primaryTypographyProps={{
-                                    color: "#ffffff",
-                                    variant: "body2",
-                                    fontSize: "0.8rem",
-                                }}
-                                secondary="42.5 ETH"
-                                secondaryTypographyProps={{
-                                    color: "#39ff14",
-                                    fontWeight: "bold",
-                                    fontSize: "0.85rem"
-                                }}
-                            />
-                        </ListItem>
-                        <ListItem sx={{ padding: "0.25rem 0" }}>
-                            <ListItemText
-                                primary="Total Raffles Completed"
-                                primaryTypographyProps={{
-                                    color: "#ffffff",
-                                    variant: "body2",
-                                    fontSize: "0.8rem",
-                                }}
-                                secondary="24"
-                                secondaryTypographyProps={{
-                                    color: "#00d1ff",
-                                    fontWeight: "bold",
-                                    fontSize: "0.85rem"
-                                }}
-                            />
-                        </ListItem>
-                        <ListItem sx={{ padding: "0.25rem 0" }}>
-                            <ListItemText
-                                primary="Total Unique Winners"
-                                primaryTypographyProps={{
-                                    color: "#ffffff",
-                                    variant: "body2",
-                                    fontSize: "0.8rem",
-                                }}
-                                secondary="18"
-                                secondaryTypographyProps={{
-                                    color: "#FF8C00",
-                                    fontWeight: "bold",
-                                    fontSize: "0.85rem"
-                                }}
-                            />
-                        </ListItem>
-                    </List>
-                </Box>
-
-                {/* Version & Link */}
-                <Box
-                    sx={{
-                        padding: "0.5rem 1rem",
-                        borderTop: "1px solid rgba(255, 255, 255, 0.05)",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                    }}
-                >
-                    <Typography variant="caption" sx={{ color: "#666666" }}>
-                        v1.0.0
-                    </Typography>
-                    <Link
-                        href="#"
-                        underline="hover"
-                        sx={{ color: "#00d1ff", fontSize: "0.75rem" }}
-                    >
-                        View Contract
-                    </Link>
-                </Box>
-            </Drawer>
+            <AppDrawer
+                drawerWidth={drawerWidth}
+                onOpenHowItWorks={handleOpenHowItWorks}
+            />
 
             {/* Main Content with offset for drawer */}
             <Box
@@ -364,8 +154,8 @@ function Raffle({ account }) {
                 <Box
                     sx={{
                         position: "fixed",
-                        top: "12px",
-                        right: "12px",
+                        top: theme.spacing(1.5),
+                        right: theme.spacing(1.5),
                         zIndex: 1000,
                     }}
                 >
@@ -373,15 +163,17 @@ function Raffle({ account }) {
                         sx={{
                             display: "flex",
                             alignItems: "center",
-                            padding: "0.5rem 1rem",
-                            borderRadius: "10px",
-                            border: "1px solid rgba(0, 209, 255, 0.3)",
-                            boxShadow: "0 2px 10px rgba(0, 209, 255, 0.15)",
+                            padding: `${theme.spacing(0.75)} ${theme.spacing(1.5)}`,
+                            borderRadius: theme.shape.borderRadius,
+                            border: `1px solid rgba(0, 209, 255, 0.3)`,
+                            boxShadow: '0 2px 10px rgba(0, 209, 255, 0.15)',
+                            backdropFilter: 'blur(8px)',
+                            backgroundColor: 'rgba(10, 10, 20, 0.7)',
                         }}
                     >
                         <Typography sx={{
-                            color: "#00d1ff",
-                            marginRight: "0.75rem",
+                            color: theme.palette.primary.main,
+                            marginRight: theme.spacing(1),
                             fontSize: "0.85rem",
                             fontWeight: "medium",
                         }}>
@@ -391,10 +183,8 @@ function Raffle({ account }) {
                             <Chip
                                 label={truncateAddress(account)}
                                 size="small"
+                                color="secondary"
                                 sx={{
-                                    backgroundColor: "rgba(57, 255, 20, 0.15)",
-                                    color: "#ffffff",
-                                    border: "1px solid #39ff14",
                                     fontFamily: "monospace",
                                     fontWeight: "bold",
                                     height: "28px",
@@ -409,7 +199,7 @@ function Raffle({ account }) {
                                 sx={{
                                     backgroundColor: "rgba(255, 58, 48, 0.15)",
                                     color: "#ffffff",
-                                    border: "1px solid #ff3a30",
+                                    border: `1px solid ${theme.palette.error.main}`,
                                     height: "28px",
                                     fontSize: "0.8rem",
                                     padding: "0 0.5rem",
@@ -420,18 +210,17 @@ function Raffle({ account }) {
                 </Box>
 
                 <Container maxWidth="lg" sx={{
-                    pt: 3,
-                    pb: 4,
+                    pt: 4,
+                    pb: 5,
                     height: "100%",
                     display: "flex",
                     flexDirection: "column",
                 }}>
                     {/* Main Title - Centered */}
-                    <Box sx={{ textAlign: "center", mb: 2 }}>
+                    <Box sx={{ textAlign: "center", mb: 3 }}>
                         <Typography
                             variant="h4"
                             sx={{
-                                color: "#00d1ff",
                                 fontWeight: "bold",
                                 display: "flex",
                                 alignItems: "center",
@@ -443,9 +232,9 @@ function Raffle({ account }) {
                             <span role="img" aria-label="ticket" style={{ marginLeft: "8px", fontSize: "1.6rem" }}>🎫</span>
                         </Typography>
                         <Typography
-                            variant="subtitle2"
+                            variant="subtitle1"
                             sx={{
-                                color: "rgba(255, 255, 255, 0.7)",
+                                color: theme.palette.text.secondary,
                                 mt: 0.5,
                             }}
                         >
@@ -458,23 +247,30 @@ function Raffle({ account }) {
                         {/* Left Column - Entry */}
                         <Grid item xs={12} md={5}>
                             <Box sx={{
-                                backgroundColor: "rgba(20, 20, 30, 0.5)",
-                                borderRadius: "8px",
-                                border: "1px solid rgba(98, 0, 234, 0.2)",
+                                backgroundColor: theme.palette.background.card,
+                                borderRadius: "12px",
+                                border: `1px solid rgba(98, 0, 234, 0.2)`,
                                 height: "100%",
                                 display: "flex",
                                 flexDirection: "column",
                                 overflow: "hidden",
                                 minWidth: "300px",
+                                backdropFilter: 'blur(10px)',
+                                boxShadow: '0 8px 20px rgba(98, 0, 234, 0.15)',
+                                transition: 'all 0.3s ease',
+                                '&:hover': {
+                                    boxShadow: '0 12px 28px rgba(98, 0, 234, 0.2)',
+                                    transform: 'translateY(-4px)',
+                                },
                             }}>
                                 {/* Title */}
                                 <Typography
                                     variant="h5"
                                     sx={{
-                                        color: "#6200ea",
+                                        color: theme.palette.tertiary.main,
                                         textAlign: "center",
                                         py: 1.5,
-                                        borderBottom: "1px solid rgba(98, 0, 234, 0.3)",
+                                        borderBottom: `1px solid rgba(98, 0, 234, 0.3)`,
                                     }}
                                 >
                                     Enter the Raffle
@@ -490,13 +286,13 @@ function Raffle({ account }) {
                                 }}>
                                     {/* Entrance Fee */}
                                     <Box sx={{ textAlign: "center", mb: 3 }}>
-                                        <Typography variant="subtitle1" sx={{ color: "#ffffff", mb: 1 }}>
+                                        <Typography variant="subtitle1" sx={{ color: theme.palette.text.primary, mb: 1 }}>
                                             Entrance fee:
                                         </Typography>
                                         <Typography
                                             variant="h4"
                                             sx={{
-                                                color: "#39ff14",
+                                                color: theme.palette.secondary.main,
                                                 fontWeight: "bold",
                                                 animation: isLoading ? "pulse 1.5s infinite" : "none"
                                             }}
@@ -513,25 +309,16 @@ function Raffle({ account }) {
                                     }}>
                                         <Button
                                             variant="contained"
+                                            color="primary"
                                             onClick={enterRaffle}
                                             disabled={isLoading || !account}
                                             sx={{
-                                                fontSize: "1rem",
-                                                padding: "0.6rem 1.5rem",
-                                                height: "48px",
-                                                lineHeight: "1.1",
-                                                background: "linear-gradient(90deg, #00ffcc 0%, #00E5FF 100%)",
-                                                color: "#000000",
-                                                fontWeight: "bold",
-                                                borderRadius: "50px",
                                                 width: "80%",
-                                                "&:hover": {
-                                                    background: "linear-gradient(90deg, #00ffcc 20%, #00E5FF 100%)",
-                                                },
+                                                height: "48px",
                                             }}
                                         >
                                             {isLoading ? (
-                                                <CircularProgress size={24} sx={{ color: "#ffffff" }} />
+                                                <CircularProgress size={24} />
                                             ) : (
                                                 "ENTER RAFFLE"
                                             )}
@@ -543,7 +330,7 @@ function Raffle({ account }) {
                                         <Typography
                                             variant="h6"
                                             sx={{
-                                                color: "#FF8C00",
+                                                color: theme.palette.warning.main,
                                                 display: "flex",
                                                 alignItems: "center",
                                                 justifyContent: "center",
@@ -555,21 +342,21 @@ function Raffle({ account }) {
                                         </Typography>
                                         <Box
                                             sx={{
-                                                backgroundColor: "rgba(20, 20, 30, 0.7)",
-                                                border: "1px solid rgba(255, 140, 0, 0.3)",
-                                                borderRadius: "4px",
+                                                backgroundColor: theme.palette.background.elevated,
+                                                border: `1px solid rgba(255, 140, 0, 0.3)`,
+                                                borderRadius: theme.shape.borderRadius / 2,
                                                 p: 1.5,
                                                 textAlign: "center"
                                             }}
                                         >
                                             {winner ? (
                                                 <Typography
-                                                    variant="body2"
                                                     sx={{
-                                                        color: "#ffffff",
+                                                        color: theme.palette.text.primary,
                                                         wordBreak: "break-word",
                                                         fontFamily: "monospace"
                                                     }}
+                                                    variant="body2"
                                                 >
                                                     {winner}
                                                 </Typography>
@@ -577,7 +364,7 @@ function Raffle({ account }) {
                                                 <Typography
                                                     variant="body2"
                                                     sx={{
-                                                        color: "#aaaaaa",
+                                                        color: theme.palette.text.secondary,
                                                         fontStyle: "italic"
                                                     }}
                                                 >
@@ -593,23 +380,30 @@ function Raffle({ account }) {
                         {/* Right Column - Participants */}
                         <Grid item xs={12} md={7}>
                             <Box sx={{
-                                backgroundColor: "rgba(20, 20, 30, 0.5)",
-                                borderRadius: "8px",
-                                border: "1px solid rgba(57, 255, 20, 0.2)",
+                                backgroundColor: theme.palette.background.card,
+                                borderRadius: "12px",
+                                border: `1px solid rgba(57, 255, 20, 0.2)`,
                                 height: "100%",
                                 display: "flex",
                                 flexDirection: "column",
                                 overflow: "hidden",
                                 minWidth: "400px",
+                                backdropFilter: 'blur(10px)',
+                                boxShadow: '0 8px 20px rgba(57, 255, 20, 0.1)',
+                                transition: 'all 0.3s ease',
+                                '&:hover': {
+                                    boxShadow: '0 12px 28px rgba(57, 255, 20, 0.15)',
+                                    transform: 'translateY(-4px)',
+                                },
                             }}>
                                 {/* Title */}
                                 <Typography
                                     variant="h5"
                                     sx={{
-                                        color: "#39ff14",
+                                        color: theme.palette.secondary.main,
                                         textAlign: "center",
                                         py: 1.5,
-                                        borderBottom: "1px solid rgba(57, 255, 20, 0.3)",
+                                        borderBottom: `1px solid rgba(57, 255, 20, 0.3)`,
                                     }}
                                 >
                                     Current Participants
@@ -624,62 +418,24 @@ function Raffle({ account }) {
                                     justifyContent: "space-between",
                                 }}>
                                     {/* Participants Table */}
-                                    <TableContainer
-                                        sx={{
-                                            backgroundColor: "rgba(20, 20, 30, 0.5)",
-                                            borderRadius: "4px",
-                                            border: "1px solid rgba(57, 255, 20, 0.1)",
-                                            mb: 3,
-                                            maxHeight: "200px",
-                                        }}
-                                    >
+                                    <TableContainer sx={{ maxHeight: "200px", mb: 3 }}>
                                         <Table stickyHeader size="small">
                                             <TableHead>
                                                 <TableRow>
-                                                    <TableCell
-                                                        sx={{
-                                                            backgroundColor: "#0a0a14",
-                                                            color: "#00d1ff",
-                                                            fontWeight: "bold",
-                                                            width: "15%",
-                                                            borderBottom: "1px solid rgba(0, 209, 255, 0.2)",
-                                                            py: 1,
-                                                        }}
-                                                    >
-                                                        #
-                                                    </TableCell>
-                                                    <TableCell
-                                                        sx={{
-                                                            backgroundColor: "#0a0a14",
-                                                            color: "#00d1ff",
-                                                            fontWeight: "bold",
-                                                            borderBottom: "1px solid rgba(0, 209, 255, 0.2)",
-                                                            py: 1,
-                                                        }}
-                                                    >
-                                                        Address
-                                                    </TableCell>
+                                                    <TableCell width="15%">#</TableCell>
+                                                    <TableCell>Address</TableCell>
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
                                                 {players.length > 0 ? (
                                                     players.map((player, index) => (
                                                         <TableRow key={index}>
-                                                            <TableCell sx={{
-                                                                color: "#ffffff",
-                                                                borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
-                                                                py: 0.75,
-                                                            }}>
-                                                                {index + 1}
-                                                            </TableCell>
+                                                            <TableCell>{index + 1}</TableCell>
                                                             <TableCell
                                                                 sx={{
-                                                                    color: "#ffffff",
                                                                     wordBreak: "break-word",
                                                                     fontFamily: "monospace",
                                                                     fontSize: "0.8rem",
-                                                                    borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
-                                                                    py: 0.75,
                                                                 }}
                                                             >
                                                                 {player}
@@ -692,9 +448,9 @@ function Raffle({ account }) {
                                                             colSpan={2}
                                                             align="center"
                                                             sx={{
-                                                                color: "#aaaaaa",
+                                                                color: theme.palette.text.secondary,
                                                                 fontStyle: "italic",
-                                                                backgroundColor: "rgba(50, 50, 60, 0.3)",
+                                                                backgroundColor: theme.palette.background.elevated,
                                                                 py: 3,
                                                             }}
                                                         >
@@ -714,12 +470,12 @@ function Raffle({ account }) {
                                     }}>
                                         <Box
                                             sx={{
-                                                backgroundColor: "rgba(20, 20, 30, 0.7)",
-                                                border: "1px solid #39ff14",
-                                                color: "#ffffff",
+                                                backgroundColor: theme.palette.background.elevated,
+                                                border: `1px solid ${theme.palette.secondary.main}`,
+                                                color: theme.palette.text.primary,
                                                 fontWeight: "bold",
                                                 borderRadius: "50px",
-                                                padding: "0.5rem 1.5rem",
+                                                padding: `${theme.spacing(0.75)} ${theme.spacing(2)}`,
                                                 fontSize: "0.85rem",
                                             }}
                                         >
@@ -732,11 +488,11 @@ function Raffle({ account }) {
                                         textAlign: "center",
                                         mb: 1,
                                     }}>
-                                        <Typography variant="body2" sx={{ color: "rgba(255, 255, 255, 0.7)", mb: 0.5 }}>
+                                        <Typography variant="body2" sx={{ color: theme.palette.text.secondary, mb: 0.5 }}>
                                             Current Prize Pool
                                         </Typography>
                                         <Typography variant="h5" sx={{
-                                            color: "#39ff14",
+                                            color: theme.palette.secondary.main,
                                             fontWeight: "600",
                                         }}>
                                             {entranceFee && players.length ? `${(entranceFee * players.length).toFixed(2)} ETH` : "0 ETH"}
@@ -748,8 +504,14 @@ function Raffle({ account }) {
                     </Grid>
                 </Container>
             </Box>
+
+            {/* How It Works Dialog */}
+            <HowItWorksDialog
+                open={howItWorksOpen}
+                onClose={handleCloseHowItWorks}
+            />
         </>
     );
-}
+};
 
 export default Raffle;
