@@ -16,10 +16,12 @@ import CasinoIcon from '@mui/icons-material/Casino';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import HistoryIcon from '@mui/icons-material/History';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import RedeemIcon from '@mui/icons-material/Redeem'; // Added for Claim Rewards
 
 const AppDrawer = ({
     drawerWidth,
     onOpenHowItWorks,
+    onOpenClaimRewards, // Added handler for Claim Rewards
     selectedMenu = 'current' // Default to current raffle
 }) => {
     const theme = useTheme();
@@ -89,6 +91,23 @@ const AppDrawer = ({
                             primary="Past Raffles"
                             primaryTypographyProps={{
                                 color: selectedMenu === 'past' ? theme.palette.text.primary : theme.palette.text.secondary,
+                            }}
+                        />
+                    </ListItemButton>
+                </ListItem>
+                {/* Added Claim Rewards Option */}
+                <ListItem disablePadding>
+                    <ListItemButton
+                        onClick={onOpenClaimRewards}
+                        selected={selectedMenu === 'claim'}
+                    >
+                        <ListItemIcon sx={{ color: selectedMenu === 'claim' ? theme.palette.primary.main : '' }}>
+                            <RedeemIcon />
+                        </ListItemIcon>
+                        <ListItemText
+                            primary="Claim Rewards"
+                            primaryTypographyProps={{
+                                color: selectedMenu === 'claim' ? theme.palette.text.primary : theme.palette.text.secondary,
                             }}
                         />
                     </ListItemButton>

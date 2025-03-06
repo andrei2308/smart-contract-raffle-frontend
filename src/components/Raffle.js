@@ -3,6 +3,7 @@ import { ethers } from "ethers";
 import { abi, address } from "../constants/constants.js";
 import HowItWorksDialog from './HowItWorks';
 import AppDrawer from './AppDrawer';
+import ClaimRewards from './ClaimRewards';
 import {
     Box,
     Typography,
@@ -34,7 +35,9 @@ function Raffle({ account }) {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const [howItWorksOpen, setHowItWorksOpen] = useState(false);
+    const [openClaimRewards, setOpenClaimRewards] = useState(false);
     const [eligibleAddresses, setEligibleAddresses] = useState(new Set());
+    const [selectedMenu, setSelectedMenu] = useState('current');
 
     const listenersInitialized = useRef(false);
     const allEligibleAddresses = useRef(new Set());
@@ -155,7 +158,7 @@ function Raffle({ account }) {
                     "Player:", safePlayer,
                     "AchievementID:", safeAchievementID);
 
-                allEligibleAddresses.current.add(safePlayer);
+                allEligibleAddresses.current.add(safePlayer.toLowerCase());
 
                 setEligibleAddresses(prevAddresses => {
                     const newSet = new Set([...prevAddresses]);
@@ -235,6 +238,8 @@ function Raffle({ account }) {
             <AppDrawer
                 drawerWidth={drawerWidth}
                 onOpenHowItWorks={handleOpenHowItWorks}
+                onOpenClaimRewards={() => setOpenClaimRewards(true)}
+                selectedMenu={selectedMenu}
             />
 
             {/* Main Content with offset for drawer */}
@@ -697,6 +702,11 @@ function Raffle({ account }) {
             <HowItWorksDialog
                 open={howItWorksOpen}
                 onClose={handleCloseHowItWorks}
+            />
+            <ClaimRewards
+                open={openClaimRewards}
+                onClose={() => setOpenClaimRewards(false)}
+                account={account}
             />
         </>
     );
