@@ -117,7 +117,6 @@ function Raffle({ account }) {
                 console.log("Entering the raffle...");
                 const tx = await contract.enterRaffle({
                     value: entranceFee,
-                    gasLimit: 1000000,
                 });
                 await tx.wait();
 

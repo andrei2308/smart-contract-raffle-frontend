@@ -21,8 +21,8 @@ import RedeemIcon from '@mui/icons-material/Redeem'; // Added for Claim Rewards
 const AppDrawer = ({
     drawerWidth,
     onOpenHowItWorks,
-    onOpenClaimRewards, // Added handler for Claim Rewards
-    selectedMenu = 'current' // Default to current raffle
+    onOpenClaimRewards,
+    selectedMenu = 'current'
 }) => {
     const theme = useTheme();
 
