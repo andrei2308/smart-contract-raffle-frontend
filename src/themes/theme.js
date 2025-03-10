@@ -327,7 +327,7 @@ const theme = createTheme({
         }
     },
     spacing: 8,
-    // Custom gradients
+
     gradients: {
         primary: 'linear-gradient(90deg, #00ffcc 0%, #00E5FF 100%)',
         secondary: 'linear-gradient(90deg, #39ff14 0%, #00E676 100%)',

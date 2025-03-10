@@ -366,7 +366,7 @@ function Raffle({ account }) {
                                 height: "100%",
                                 display: "flex",
                                 flexDirection: "column",
-                                gap: 3,
+                                gap: 10,
                             }}>
                                 {/* Prize Info Card */}
                                 <Card sx={{

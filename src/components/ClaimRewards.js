@@ -145,44 +145,81 @@ const ClaimRewards = ({ open, onClose, account }) => {
             maxWidth="sm"
             PaperProps={{
                 sx: {
-                    borderRadius: '12px'
+                    background: theme.palette.background.card,
+                    backdropFilter: 'blur(10px)',
+                    border: `1px solid rgba(0, 209, 255, 0.15)`,
+                    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)',
+                    '&:hover': {
+                        boxShadow: '0 12px 32px rgba(0, 209, 255, 0.1)',
+                    }
                 }
             }}
         >
-            <DialogTitle sx={{
-                display: 'flex',
-                alignItems: 'center',
-                borderBottom: `1px solid ${theme.palette.divider}`
-            }}>
-                <RedeemIcon sx={{ mr: 1, color: theme.palette.primary.main }} />
-                <Typography variant="h6">
+            <DialogTitle
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    borderBottom: `1px solid ${theme.palette.divider}`,
+                    py: 2
+                }}
+            >
+                <RedeemIcon sx={{ mr: 1.5, color: theme.palette.primary.main }} />
+                <Typography variant="h5" sx={{ fontWeight: 600 }}>
                     Claim Rewards
                 </Typography>
             </DialogTitle>
 
-            <DialogContent sx={{ mt: 2, minHeight: '200px' }}>
+            <DialogContent sx={{ mt: 2, minHeight: '250px', p: 3 }}>
                 {!account ? (
-                    <Alert severity="warning">
+                    <Alert
+                        severity="warning"
+                        sx={{
+                            backgroundColor: 'rgba(255, 140, 0, 0.15)',
+                            border: '1px solid rgba(255, 140, 0, 0.3)'
+                        }}
+                    >
                         <AlertTitle>Wallet Not Connected</AlertTitle>
                         Please connect your wallet to check eligibility for rewards.
                     </Alert>
                 ) : loading ? (
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '150px' }}>
-                        <CircularProgress />
+                        <CircularProgress sx={{ color: theme.palette.primary.main }} />
                     </Box>
                 ) : error ? (
-                    <Alert severity="error" sx={{ mt: 2 }}>
+                    <Alert
+                        severity="error"
+                        sx={{
+                            mt: 2,
+                            backgroundColor: 'rgba(255, 58, 48, 0.15)',
+                            border: '1px solid rgba(255, 58, 48, 0.3)'
+                        }}
+                    >
                         <AlertTitle>Error</AlertTitle>
                         {error}
                     </Alert>
                 ) : alreadyClaimed ? (
-                    <Alert severity="info" sx={{ mt: 2 }}>
+                    <Alert
+                        severity="info"
+                        sx={{
+                            mt: 2,
+                            backgroundColor: 'rgba(0, 209, 255, 0.15)',
+                            border: '1px solid rgba(0, 209, 255, 0.3)'
+                        }}
+                    >
                         <AlertTitle>Already Claimed</AlertTitle>
                         You have already claimed your rewards.
                     </Alert>
                 ) : claimSuccess ? (
                     <Box>
-                        <Alert severity="success" sx={{ mb: 2 }}>
+                        <Alert
+                            severity="success"
+                            sx={{
+                                mb: 2,
+                                backgroundColor: 'rgba(57, 255, 20, 0.15)',
+                                border: '1px solid rgba(57, 255, 20, 0.3)',
+                                color: theme.palette.text.primary
+                            }}
+                        >
                             <AlertTitle>Success</AlertTitle>
                             You have successfully claimed your rewards!
                         </Alert>
@@ -193,7 +230,14 @@ const ClaimRewards = ({ open, onClose, account }) => {
                                     href={`https://sepolia.etherscan.io/tx/${txHash}`}
                                     target="_blank"
                                     rel="noopener"
-                                    sx={{ ml: 1 }}
+                                    sx={{
+                                        ml: 1,
+                                        color: theme.palette.primary.main,
+                                        '&:hover': {
+                                            color: theme.palette.primary.light,
+                                            textDecoration: 'none'
+                                        }
+                                    }}
                                 >
                                     View on Etherscan
                                 </Link>
@@ -202,40 +246,86 @@ const ClaimRewards = ({ open, onClose, account }) => {
                     </Box>
                 ) : claimData ? (
                     <Box>
-                        <Alert severity="success" sx={{ mb: 3 }}>
+                        <Alert
+                            severity="success"
+                            sx={{
+                                mb: 3,
+                                backgroundColor: 'rgba(57, 255, 20, 0.15)',
+                                border: '1px solid rgba(57, 255, 20, 0.3)',
+                                color: theme.palette.text.primary
+                            }}
+                        >
                             <AlertTitle>Eligible for Rewards</AlertTitle>
                             You are eligible to claim rewards!
                         </Alert>
 
-                        <Paper variant="outlined" sx={{ p: 2, mb: 2 }}>
-                            <Typography variant="subtitle2" gutterBottom>
+                        <Paper
+                            variant="outlined"
+                            sx={{
+                                p: 2.5,
+                                mb: 2,
+                                backgroundColor: 'rgba(20, 20, 30, 0.5)',
+                                backdropFilter: 'blur(5px)',
+                                border: '1px solid rgba(0, 209, 255, 0.15)'
+                            }}
+                        >
+                            <Typography variant="subtitle2" gutterBottom sx={{ color: theme.palette.primary.main }}>
                                 Reward Details
                             </Typography>
-                            <Divider sx={{ mb: 2 }} />
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                            <Divider sx={{ mb: 2, borderColor: 'rgba(0, 209, 255, 0.15)' }} />
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1.5 }}>
                                 <Typography variant="body2" color="text.secondary">Address:</Typography>
-                                <Typography variant="body2" sx={{ wordBreak: 'break-all' }}>
+                                <Typography
+                                    variant="monospace"
+                                    sx={{
+                                        wordBreak: 'break-all',
+                                        color: theme.palette.text.primary
+                                    }}
+                                >
                                     {account}
                                 </Typography>
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Typography variant="body2" color="text.secondary">Amount:</Typography>
-                                <Typography variant="body2" fontWeight="bold">
+                                <Typography
+                                    variant="body2"
+                                    fontWeight="bold"
+                                    sx={{ color: theme.palette.secondary.main }}
+                                >
                                     {claimData.amount} tokens
                                 </Typography>
                             </Box>
                         </Paper>
                     </Box>
                 ) : (
-                    <Alert severity="info">
+                    <Alert
+                        severity="info"
+                        sx={{
+                            borderRadius: theme.shape.borderRadius,
+                            backgroundColor: 'rgba(0, 209, 255, 0.15)',
+                            border: '1px solid rgba(0, 209, 255, 0.3)'
+                        }}
+                    >
                         <AlertTitle>Checking Eligibility</AlertTitle>
                         Connecting to the blockchain...
                     </Alert>
                 )}
             </DialogContent>
 
-            <DialogActions sx={{ p: 2, borderTop: `1px solid ${theme.palette.divider}` }}>
-                <Button onClick={handleClose} disabled={claiming}>
+            <DialogActions
+                sx={{
+                    p: 2.5,
+                    borderTop: `1px solid ${theme.palette.divider}`
+                }}
+            >
+                <Button
+                    onClick={handleClose}
+                    disabled={claiming}
+                    sx={{
+                        borderRadius: 50,
+                        fontWeight: 600
+                    }}
+                >
                     Close
                 </Button>
                 {claimData && !claimSuccess && !alreadyClaimed && (
@@ -243,7 +333,19 @@ const ClaimRewards = ({ open, onClose, account }) => {
                         variant="contained"
                         onClick={handleClaim}
                         disabled={claiming}
-                        startIcon={claiming ? <CircularProgress size={20} /> : null}
+                        startIcon={claiming ? <CircularProgress size={20} color="inherit" /> : null}
+                        sx={{
+                            background: theme.gradients.primary,
+                            color: '#000000',
+                            borderRadius: 50,
+                            padding: '10px 24px',
+                            fontWeight: 600,
+                            boxShadow: '0 4px 12px rgba(0, 209, 255, 0.2)',
+                            '&:hover': {
+                                transform: 'translateY(-2px)',
+                                boxShadow: '0 6px 16px rgba(0, 209, 255, 0.3)',
+                            }
+                        }}
                     >
                         {claiming ? 'Claiming...' : 'Claim Rewards'}
                     </Button>
