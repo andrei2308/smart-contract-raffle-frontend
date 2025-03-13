@@ -1,26 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
+import { keyframes } from '@emotion/react';
 import { ethers } from "ethers";
 import { abi, address } from "../constants/constants.js";
 import HowItWorksDialog from './HowItWorks';
 import AppDrawer from './AppDrawer';
 import ClaimRewards from './ClaimRewards';
+import WinnerCard from './Winner';
+import Participants from './Participants';
+import EnterRaffle from './Enter';
+import PrizePool from './PrizePool';
 import {
     Box,
     Typography,
     Container,
     Grid,
     Chip,
-    Button,
-    TableContainer,
-    Table,
-    TableHead,
-    TableBody,
-    TableRow,
-    TableCell,
-    CircularProgress,
-    Card,
-    CardHeader,
-    CardContent,
 } from '@mui/material';
 import { alpha } from "@mui/material/styles";
 import "../App.css";
@@ -28,6 +22,53 @@ import theme from "../themes/theme.js"
 import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
+const float = keyframes`
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+`;
+
+const pulse = keyframes`
+  0% { opacity: 0.6; box-shadow: 0 0 0 0 rgba(0, 209, 255, 0.4); }
+  70% { opacity: 1; box-shadow: 0 0 0 10px rgba(0, 209, 255, 0); }
+  100% { opacity: 0.6; box-shadow: 0 0 0 0 rgba(0, 209, 255, 0); }
+`;
+
+const glow = keyframes`
+  0% { box-shadow: 0 0 5px rgba(57, 255, 20, 0.5); }
+  50% { box-shadow: 0 0 20px rgba(57, 255, 20, 0.8); }
+  100% { box-shadow: 0 0 5px rgba(57, 255, 20, 0.5); }
+`;
+
+const Particles = () => (
+    <Box sx={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        overflow: 'hidden',
+        zIndex: 0,
+        pointerEvents: 'none',
+    }}>
+        {Array.from({ length: 20 }).map((_, i) => (
+            <Box
+                key={i}
+                sx={{
+                    position: 'absolute',
+                    width: Math.random() * 3 + 1,
+                    height: Math.random() * 3 + 1,
+                    backgroundColor: theme.palette.primary.main,
+                    borderRadius: '50%',
+                    opacity: Math.random() * 0.5 + 0.1,
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                    animation: `${float} ${Math.random() * 10 + 15}s linear infinite`,
+                }}
+            />
+        ))}
+    </Box>
+);
 function Raffle({ account }) {
     const [entranceFee, setEntranceFee] = useState(null);
     const [players, setPlayers] = useState([]);
@@ -232,7 +273,25 @@ function Raffle({ account }) {
     };
 
     return (
-        <>
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100vh',
+                width: '100%',
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                overflow: 'auto',
+                backgroundColor: theme.palette.background.default,
+                background: `radial-gradient(circle at 50% 50%, ${alpha(theme.palette.primary.dark, 0.4)} 0%, ${theme.palette.background.default} 70%)`,
+            }}
+        >
+
+            <Particles />
+
             {/* Left Drawer */}
             <AppDrawer
                 drawerWidth={drawerWidth}
@@ -249,7 +308,7 @@ function Raffle({ account }) {
                     minHeight: "100vh",
                     display: "flex",
                     flexDirection: "column",
-                    backgroundColor: theme.palette.background.default,
+                    position: "relative",
                 }}
             >
                 {/* Connected Account Box - Fixed Position in Top Right */}
@@ -319,9 +378,35 @@ function Raffle({ account }) {
                         px: 4,
                         textAlign: "center",
                         background: `linear-gradient(180deg, ${alpha(theme.palette.primary.dark, 0.2)} 0%, transparent 100%)`,
-                        borderBottom: `1px solid ${alpha(theme.palette.divider, 0.1)}`
+                        borderBottom: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
+                        position: 'relative',
+                        overflow: 'hidden',
                     }}
                 >
+
+                    {/* Decorative elements */}
+                    <Box sx={{
+                        position: 'absolute',
+                        top: -50,
+                        left: '10%',
+                        width: 100,
+                        height: 100,
+                        borderRadius: '50%',
+                        background: `radial-gradient(circle, ${alpha(theme.palette.primary.main, 0.2)} 0%, transparent 70%)`,
+                        zIndex: 0,
+                    }} />
+
+                    <Box sx={{
+                        position: 'absolute',
+                        bottom: -30,
+                        right: '15%',
+                        width: 80,
+                        height: 80,
+                        borderRadius: '50%',
+                        background: `radial-gradient(circle, ${alpha(theme.palette.secondary.main, 0.2)} 0%, transparent 70%)`,
+                        zIndex: 0,
+                    }} />
+
                     <Typography
                         variant="h4"
                         sx={{
@@ -358,341 +443,31 @@ function Raffle({ account }) {
                         flexGrow: 1,
                     }}
                 >
-                    {/* Main Content Grid */}
+                    {/* Top Row - Three Equal Boxes */}
                     <Grid container spacing={3} sx={{ height: "100%" }}>
-                        {/* Left Column - Raffle Info & Stats */}
-                        <Grid item xs={12} md={4}>
-                            <Box sx={{
-                                height: "100%",
-                                display: "flex",
-                                flexDirection: "column",
-                                gap: 10,
-                            }}>
-                                {/* Prize Info Card */}
-                                <Card sx={{
-                                    backgroundColor: alpha(theme.palette.background.paper, 0.7),
-                                    borderRadius: "16px",
-                                    border: `1px solid ${alpha(theme.palette.info.main, 0.2)}`,
-                                    overflow: "hidden",
-                                    backdropFilter: 'blur(10px)',
-                                    boxShadow: `0 8px 20px ${alpha(theme.palette.info.main, 0.15)}`,
-                                    transition: 'all 0.3s ease',
-                                    '&:hover': {
-                                        boxShadow: `0 12px 28px ${alpha(theme.palette.info.main, 0.2)}`,
-                                        transform: 'translateY(-4px)',
-                                    },
-                                }}>
-                                    <CardHeader
-                                        title="Prize Pool"
-                                        titleTypographyProps={{
-                                            align: "center",
-                                            variant: "h6",
-                                            color: theme.palette.info.main,
-                                            fontWeight: "bold"
-                                        }}
-                                        sx={{
-                                            borderBottom: `1px solid ${alpha(theme.palette.info.main, 0.2)}`,
-                                            pb: 1,
-                                        }}
-                                    />
-                                    <CardContent sx={{ textAlign: "center", py: 3 }}>
-                                        <Typography variant="h4" sx={{
-                                            color: theme.palette.secondary.main,
-                                            fontWeight: "600",
-                                            mb: 1,
-                                        }}>
-                                            {entranceFee && players.length ? `${(entranceFee * players.length).toFixed(2)} ETH` : "0 ETH"}
-                                        </Typography>
-                                        <Typography variant="body2" color="text.secondary">
-                                            Total value to be won
-                                        </Typography>
-                                    </CardContent>
-                                </Card>
-
-                                {/* Last Winner Card */}
-                                <Card sx={{
-                                    backgroundColor: alpha(theme.palette.background.paper, 0.7),
-                                    borderRadius: "16px",
-                                    border: `1px solid ${alpha(theme.palette.warning.main, 0.2)}`,
-                                    overflow: "hidden",
-                                    backdropFilter: 'blur(10px)',
-                                    boxShadow: `0 8px 20px ${alpha(theme.palette.warning.main, 0.1)}`,
-                                    transition: 'all 0.3s ease',
-                                    '&:hover': {
-                                        boxShadow: `0 12px 28px ${alpha(theme.palette.warning.main, 0.15)}`,
-                                        transform: 'translateY(-4px)',
-                                    },
-                                }}>
-                                    <CardHeader
-                                        title={
-                                            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                                <span role="img" aria-label="trophy" style={{ marginRight: "8px" }}>🏆</span>
-                                                Last Winner
-                                            </Box>
-                                        }
-                                        titleTypographyProps={{
-                                            align: "center",
-                                            variant: "h6",
-                                            color: theme.palette.warning.main,
-                                            fontWeight: "bold"
-                                        }}
-                                        sx={{
-                                            borderBottom: `1px solid ${alpha(theme.palette.warning.main, 0.2)}`,
-                                            pb: 1,
-                                        }}
-                                    />
-                                    <CardContent sx={{ textAlign: "center", py: 3 }}>
-                                        <Box
-                                            sx={{
-                                                backgroundColor: alpha(theme.palette.background.default, 0.5),
-                                                border: `1px solid ${alpha(theme.palette.warning.main, 0.3)}`,
-                                                borderRadius: theme.shape.borderRadius,
-                                                p: 2,
-                                                maxWidth: "100%",
-                                                overflowWrap: "break-word"
-                                            }}
-                                        >
-                                            {winner ? (
-                                                <Typography
-                                                    sx={{
-                                                        color: theme.palette.text.primary,
-                                                        fontFamily: "monospace",
-                                                        fontSize: "0.85rem"
-                                                    }}
-                                                >
-                                                    {winner}
-                                                </Typography>
-                                            ) : (
-                                                <Typography
-                                                    variant="body2"
-                                                    sx={{
-                                                        color: theme.palette.text.secondary,
-                                                        fontStyle: "italic"
-                                                    }}
-                                                >
-                                                    No winner yet
-                                                </Typography>
-                                            )}
-                                        </Box>
-                                    </CardContent>
-                                </Card>
-                            </Box>
-                        </Grid>
+                        {/* Left Column - Prize Pool Card */}
+                        <PrizePool
+                            entranceFee={entranceFee}
+                            players={players}
+                            theme={theme}
+                        />
 
                         {/* Middle Column - Enter Raffle */}
-                        <Grid item xs={12} md={4}>
-                            <Card sx={{
-                                height: "100%",
-                                backgroundColor: alpha(theme.palette.background.paper, 0.7),
-                                borderRadius: "16px",
-                                border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
-                                display: "flex",
-                                flexDirection: "column",
-                                overflow: "hidden",
-                                backdropFilter: 'blur(10px)',
-                                boxShadow: `0 8px 20px ${alpha(theme.palette.primary.main, 0.15)}`,
-                                transition: 'all 0.3s ease',
-                                '&:hover': {
-                                    boxShadow: `0 12px 28px ${alpha(theme.palette.primary.main, 0.2)}`,
-                                    transform: 'translateY(-4px)',
-                                },
-                            }}>
-                                <CardHeader
-                                    title="Enter the Raffle"
-                                    titleTypographyProps={{
-                                        align: "center",
-                                        variant: "h6",
-                                        color: theme.palette.primary.main,
-                                        fontWeight: "bold"
-                                    }}
-                                    sx={{
-                                        borderBottom: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
-                                        pb: 1,
-                                    }}
-                                />
-                                <CardContent sx={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    alignItems: "center",
-                                    justifyContent: "space-between",
-                                    flexGrow: 1,
-                                    p: 3
-                                }}>
-                                    {/* Entrance Fee */}
-                                    <Box sx={{ textAlign: "center", mb: 4, mt: 2 }}>
-                                        <Typography variant="subtitle1" sx={{ color: theme.palette.text.secondary, mb: 1 }}>
-                                            Entrance fee:
-                                        </Typography>
-                                        <Typography
-                                            variant="h4"
-                                            sx={{
-                                                color: theme.palette.primary.main,
-                                                fontWeight: "bold",
-                                                animation: isLoading ? "pulse 1.5s infinite" : "none",
-                                                '@keyframes pulse': {
-                                                    '0%': { opacity: 0.6 },
-                                                    '50%': { opacity: 1 },
-                                                    '100%': { opacity: 0.6 }
-                                                }
-                                            }}
-                                        >
-                                            {entranceFee ? `${entranceFee} ETH` : "Loading..."}
-                                        </Typography>
-                                    </Box>
-
-                                    {/* Participants Count */}
-                                    <Box sx={{
-                                        background: alpha(theme.palette.background.default, 0.5),
-                                        border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
-                                        borderRadius: "12px",
-                                        padding: 2,
-                                        width: "100%",
-                                        textAlign: "center",
-                                        mb: 4
-                                    }}>
-                                        <Typography variant="body2" color="text.secondary" gutterBottom>
-                                            Current Participants
-                                        </Typography>
-                                        <Typography variant="h5" color={theme.palette.text.primary} fontWeight="medium">
-                                            {players.length}
-                                        </Typography>
-                                    </Box>
-
-                                    {/* Enter Button */}
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={enterRaffle}
-                                        disabled={isLoading || !account}
-                                        fullWidth
-                                        sx={{
-                                            height: "54px",
-                                            borderRadius: "27px",
-                                            fontSize: "1rem",
-                                            fontWeight: "bold",
-                                            boxShadow: `0 8px 16px ${alpha(theme.palette.primary.main, 0.3)}`,
-                                            mt: 'auto',
-                                            '&:hover': {
-                                                boxShadow: `0 12px 24px ${alpha(theme.palette.primary.main, 0.4)}`,
-                                                transform: 'translateY(-2px)'
-                                            }
-                                        }}
-                                    >
-                                        {isLoading ? (
-                                            <CircularProgress size={24} color="inherit" />
-                                        ) : (
-                                            "ENTER RAFFLE"
-                                        )}
-                                    </Button>
-                                </CardContent>
-                            </Card>
-                        </Grid>
+                        <EnterRaffle
+                            entranceFee={entranceFee}
+                            players={players}
+                            isLoading={isLoading}
+                            account={account}
+                            enterRaffle={enterRaffle}
+                            theme={theme}
+                        />
 
                         {/* Right Column - Participants */}
-                        <Grid item xs={12} md={4}>
-                            <Card sx={{
-                                height: "100%",
-                                backgroundColor: alpha(theme.palette.background.paper, 0.7),
-                                borderRadius: "16px",
-                                border: `1px solid ${alpha(theme.palette.secondary.main, 0.2)}`,
-                                display: "flex",
-                                flexDirection: "column",
-                                overflow: "hidden",
-                                backdropFilter: 'blur(10px)',
-                                boxShadow: `0 8px 20px ${alpha(theme.palette.secondary.main, 0.1)}`,
-                                transition: 'all 0.3s ease',
-                                '&:hover': {
-                                    boxShadow: `0 12px 28px ${alpha(theme.palette.secondary.main, 0.15)}`,
-                                    transform: 'translateY(-4px)',
-                                },
-                            }}>
-                                <CardHeader
-                                    title="Participants"
-                                    titleTypographyProps={{
-                                        align: "center",
-                                        variant: "h6",
-                                        color: theme.palette.secondary.main,
-                                        fontWeight: "bold"
-                                    }}
-                                    sx={{
-                                        borderBottom: `1px solid ${alpha(theme.palette.secondary.main, 0.2)}`,
-                                        pb: 1,
-                                    }}
-                                />
-                                <CardContent sx={{ p: 0, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                                    {/* Participants Table */}
-                                    <TableContainer sx={{ flexGrow: 1, maxHeight: "400px" }}>
-                                        <Table stickyHeader size="small">
-                                            <TableHead>
-                                                <TableRow>
-                                                    <TableCell
-                                                        width="15%"
-                                                        sx={{
-                                                            backgroundColor: alpha(theme.palette.secondary.main, 0.1),
-                                                            color: theme.palette.secondary.main,
-                                                            fontWeight: "bold"
-                                                        }}
-                                                    >
-                                                        #
-                                                    </TableCell>
-                                                    <TableCell
-                                                        sx={{
-                                                            backgroundColor: alpha(theme.palette.secondary.main, 0.1),
-                                                            color: theme.palette.secondary.main,
-                                                            fontWeight: "bold"
-                                                        }}
-                                                    >
-                                                        Address
-                                                    </TableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                                {players.length > 0 ? (
-                                                    players.map((player, index) => (
-                                                        <TableRow
-                                                            key={index}
-                                                            sx={{
-                                                                '&:nth-of-type(odd)': {
-                                                                    backgroundColor: alpha(theme.palette.background.default, 0.3),
-                                                                },
-                                                                '&:hover': {
-                                                                    backgroundColor: alpha(theme.palette.action.hover, 0.1),
-                                                                }
-                                                            }}
-                                                        >
-                                                            <TableCell>{index + 1}</TableCell>
-                                                            <TableCell
-                                                                sx={{
-                                                                    wordBreak: "break-word",
-                                                                    fontFamily: "monospace",
-                                                                    fontSize: "0.8rem",
-                                                                }}
-                                                            >
-                                                                {player}
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    ))
-                                                ) : (
-                                                    <TableRow>
-                                                        <TableCell
-                                                            colSpan={2}
-                                                            align="center"
-                                                            sx={{
-                                                                color: theme.palette.text.secondary,
-                                                                fontStyle: "italic",
-                                                                py: 4,
-                                                            }}
-                                                        >
-                                                            No participants yet. Be the first to join!
-                                                        </TableCell>
-                                                    </TableRow>
-                                                )}
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
-                                </CardContent>
-                            </Card>
-                        </Grid>
+                        <Participants players={players} theme={theme} />
+
+                        {/* Bottom Row - Last Winner Card (Full Width) */}
+                        <WinnerCard winner={winner} theme={theme} />
+
                     </Grid>
                 </Container>
             </Box>
@@ -707,7 +482,7 @@ function Raffle({ account }) {
                 onClose={() => setOpenClaimRewards(false)}
                 account={account}
             />
-        </>
+        </Box>
     );
 };
 

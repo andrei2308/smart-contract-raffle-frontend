@@ -21,7 +21,7 @@ import { address, abi } from "../constants/constantsAirdrop.js"
 import { BrowserProvider, Contract } from 'ethers';
 import RedeemIcon from '@mui/icons-material/Redeem';
 
-// ABI for the MerkleAirdrop contract - You need to replace this with your actual ABI
+// ABI for the MerkleAirdrop contract
 const CONTRACT_ABI = abi;
 const CONTRACT_ADDRESS = address;
 
